@@ -47,6 +47,7 @@ public class User {
     public void addMuseum(Museum m) {
         this.museums.add(m);
         m.users.add(this);
+
     }
 
     public void removeMuseum(Museum m) {

@@ -1,6 +1,8 @@
 package com.example.backend.tools;
+
 import org.springframework.security.crypto.codec.Hex;
 import java.security.MessageDigest;
+
 public class Utils {
     public static String ComputeHash(String pwd, String salt)
     {
