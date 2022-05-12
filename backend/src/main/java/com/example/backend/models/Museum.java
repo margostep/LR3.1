@@ -1,5 +1,5 @@
 package com.example.backend.models;
-import com.example.backend.models.Painting;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -32,8 +32,12 @@ public class Museum {
 
     @JsonIgnore
     @OneToMany
-   @JoinTable(name = "usersmuseums",
-           joinColumns = @JoinColumn(name = "museumid"),
+    @JoinTable(name = "usersmuseums",
+            joinColumns = @JoinColumn(name = "museumid"),
             inverseJoinColumns = @JoinColumn(name = "userid"))
     public Set<User> users = new HashSet<>();
+
+ /*   @JsonIgnore
+    @OneToMany(mappedBy = "museum")
+    public List<Painting> paintings = new ArrayList<Painting>(); */
 }

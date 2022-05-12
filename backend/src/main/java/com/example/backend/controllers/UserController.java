@@ -1,14 +1,15 @@
 package com.example.backend.controllers;
 
+import com.example.backend.models.Artist;
 import com.example.backend.models.Museum;
 import com.example.backend.models.User;
-import com.example.backend.repositories.MuseumRepository;
-import com.example.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import com.example.backend.repositories.MuseumRepository;
+import com.example.backend.repositories.UserRepository;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
@@ -20,27 +21,29 @@ public class UserController {
     UserRepository userRepository;
     @Autowired
     MuseumRepository museumRepository;
-
     @GetMapping("/users")
-    public List<User> getAllUsers() {
+    public List
+    getAllUsers() {
         return userRepository.findAll();
     }
 
     @PostMapping("/users")
-    public ResponseEntity<?> createUser(@Validated @RequestBody User user) {
+    public ResponseEntity<Object> createUser(@RequestBody User user)
+            throws Exception {
         try {
-            User nu = userRepository.save(user);
-            return new ResponseEntity<User>(nu, HttpStatus.OK);
+            User nc = userRepository.save(user);
+            return new ResponseEntity<Object>(nc, HttpStatus.OK);
         }
-        catch (Exception ex) {
+        catch(Exception ex) {
             String error;
-            if (ex.getMessage().contains("usersmuseums.name_UNIQUE"))
+            if (ex.getMessage().contains("users.name_UNIQUE"))
                 error = "useralreadyexists";
             else
                 error = "undefinederror";
-            Map<String, String> map = new HashMap<>();
+            Map<String, String>
+                    map = new HashMap<>();
             map.put("error", error);
-            return new ResponseEntity<Object>(map, HttpStatus.OK);
+            return ResponseEntity.ok(map);
         }
     }
 
@@ -83,6 +86,12 @@ public class UserController {
         return ResponseEntity.ok(responce);
     }
 
+/*    @GetMapping("/countries/{id}/artists")
+    public ResponseEntity<List<Artist>> getCountryArtists(@PathVariable(value = "id") Long countryId) {
+        Optional<Country> cc = countryRepository.findById(countryId);
+        return cc.map(country -> ResponseEntity.ok(country.artists)).orElseGet(() -> ResponseEntity.ok(new ArrayList<>()));
+    }
+*/
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long userId,
                                            @Validated @RequestBody User userDetails) {

@@ -24,17 +24,18 @@ public class CountryController {
     }
 
     @PostMapping("/countries")
-    public ResponseEntity<Object> createCountry(@RequestBody Country country) {
+    public ResponseEntity<Object> createCountry(@RequestBody Country country)
+            throws Exception {
         try {
             Country nc = countryRepository.save(country);
-            return ResponseEntity.ok(nc);
+            return new ResponseEntity<Object>(nc, HttpStatus.OK);
         }
         catch(Exception ex) {
             String error;
             if (ex.getMessage().contains("countries.name_UNIQUE"))
-                error = "country_already_exists";
+                error = "countyalreadyexists";
             else
-                error = "undefined_error";
+                error = "undefinederror";
             Map<String, String>
                     map = new HashMap<>();
             map.put("error", error);
@@ -76,10 +77,4 @@ public class CountryController {
             response.put("deleted", Boolean.FALSE);
         return response;
     }
-
 }
-
-
-
-
-

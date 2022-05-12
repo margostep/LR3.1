@@ -1,8 +1,6 @@
 package com.example.backend.controllers;
 
-import com.example.backend.models.Country;
 import com.example.backend.models.Painting;
-import com.example.backend.repositories.CountryRepository;
 import com.example.backend.repositories.PaintingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +9,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.Column;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,27 +19,25 @@ import java.util.Optional;
 public class PaintingController {
     @Autowired
     PaintingRepository paintingRepository;
+
     @GetMapping("/paintings")
-    public List
-    getAllCPaintings() {
+    public List<Painting> getAllPaintings() {
         return paintingRepository.findAll();
     }
-    @Column(name = "name", nullable = false, unique = true)
-    public String name;
+
     @PostMapping("/paintings")
-    public ResponseEntity<Object> createPainting(@RequestBody Painting painting)
-            throws Exception {
+    public ResponseEntity<?> createPainting(@Validated @RequestBody Painting paint) {
         try {
-            Painting nc = paintingRepository.save(painting);
-            return new ResponseEntity<Object>(nc, HttpStatus.OK);
-        } catch (Exception ex) {
+            Painting nm = paintingRepository.save(paint);
+            return new ResponseEntity(nm, HttpStatus.OK);
+        }
+        catch (Exception ex) {
             String error;
-            if (ex.getMessage().contains("paintingss.name_UNIQUE"))
-                error = "paintingalreadyexists";
+            if (ex.getMessage().contains("paintings.name_UNIQUE"))
+                error = "painting_already_exists";
             else
-                error = "undefinederror";
-            Map<String, String>
-                    map = new HashMap<>();
+                error = "undefined_error";
+            Map<String, String> map = new HashMap<>();
             map.put("error", error);
             return new ResponseEntity<Object>(map, HttpStatus.OK);
         }

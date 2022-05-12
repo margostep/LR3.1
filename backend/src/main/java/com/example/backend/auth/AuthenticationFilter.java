@@ -21,7 +21,7 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
     }
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
-            throws AuthenticationException, IOException, ServletException {
+        throws AuthenticationException, IOException, ServletException {
 
         Enumeration headerNames = httpServletRequest.getHeaderNames();
         String token= httpServletRequest.getHeader(AUTHORIZATION);
@@ -39,3 +39,4 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
         chain.doFilter(request, response);
     }
 }
+

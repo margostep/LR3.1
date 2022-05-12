@@ -24,36 +24,41 @@ public class ArtistController {
     @Autowired
     CountryRepository countryRepository;
     @GetMapping("/artists")
-    public List<Artist> getAllCountries() {
+    public List
+    getAllArtists() {
         return artistRepository.findAll();
     }
 
     @PostMapping("/artists")
-    public ResponseEntity<?> createArtist(@Validated @RequestBody Artist artist) {
+    public ResponseEntity<Object> createArtist(@RequestBody Artist artist)
+            throws Exception {
         try {
-            Artist na = artistRepository.save(artist);
-            Optional<Country> cc = countryRepository.findById(artist.country.id);
+            //Artist nc = artistRepository.save(artist);
+            //return new ResponseEntity<Object>(nc, HttpStatus.OK);
+            Optional<Country>
+                    cc = countryRepository.findById(artist.country.id);
             if (cc.isPresent()) {
-                na.country = cc.get();
+                artist.country = cc.get();
             }
-
-            return new ResponseEntity<Artist>(na, HttpStatus.OK);
+            Artist nc = artistRepository.save(artist);
+            return new ResponseEntity<Object>(nc, HttpStatus.OK);
         }
-        catch (Exception ex) {
+        catch(Exception ex) {
             String error;
             if (ex.getMessage().contains("artists.name_UNIQUE"))
-                error = "artistsalreadyexists";
+                error = "artistalreadyexists";
             else
                 error = "undefinederror";
-            Map<String, String> map = new HashMap<>();
+            Map<String, String>
+                    map = new HashMap<>();
             map.put("error", error);
-            return new ResponseEntity<Object>(map, HttpStatus.OK);
+            return ResponseEntity.ok(map);
         }
     }
 
     @PutMapping("/artists/{id}")
     public ResponseEntity<Artist> updateArtist(@PathVariable(value = "id") Long artistId,
-                                               @Validated @RequestBody Artist artistDetails) {
+                                                 @Validated @RequestBody Artist artistDetails) {
         Artist artist = null;
         Optional<Artist> cc = artistRepository.findById(artistId);
         if (cc.isPresent()) {
@@ -69,8 +74,8 @@ public class ArtistController {
 
     @DeleteMapping("/artists/{id}")
     public Map<String, Boolean> deleteArtist(@PathVariable(value = "id") Long artistId) {
-        Map<String, Boolean> response = new HashMap<>();
         Optional<Artist> artist = artistRepository.findById(artistId);
+        Map<String, Boolean> response = new HashMap<>();
         if (artist.isPresent()) {
             artistRepository.delete(artist.get());
             response.put("deleted", Boolean.TRUE);

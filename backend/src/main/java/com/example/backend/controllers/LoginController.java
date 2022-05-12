@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/auth")
 public class LoginController {
@@ -30,7 +31,7 @@ public class LoginController {
             if (uu.isPresent()) {
                 User u2 = uu.get();
                 String hash1 = u2.password;
-                String sait = u2.salt;
+                String sait = u2.sait;
                 String hash2 = Utils.ComputeHash(pwd, sait);
                 if (hash1.equals(hash2)) {
                     String token = UUID.randomUUID().toString();
